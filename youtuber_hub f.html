@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creator Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --card: #111111;
+    --card2: #161616;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #f0f0f0;
+    --muted: #888;
+    --accent: #ff4444;
+    --accent2: #ff8800;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    text-align: center;
+    padding: 52px 24px 32px;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,68,68,0.13) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .avatar-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 18px;
+  }
+  .avatar {
+    width: 88px; height: 88px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff4444 0%, #ff8800 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 36px;
+    letter-spacing: 1px;
+    color: #fff;
+    border: 3px solid rgba(255,255,255,0.12);
+  }
+  .live-dot {
+    position: absolute;
+    bottom: 4px; right: 4px;
+    width: 16px; height: 16px;
+    background: #22c55e;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.5); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  }
+  .creator-name {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 42px;
+    letter-spacing: 2px;
+    line-height: 1;
+    margin-bottom: 6px;
+    background: linear-gradient(90deg, #fff 60%, #ff8800 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .creator-bio {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 320px;
+    margin: 0 auto 24px;
+    line-height: 1.6;
+  }
+  .tag-row {
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .tag {
+    font-size: 11px; font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* STATS STRIP */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 0 0 28px;
+  }
+  .stat-box {
+    background: var(--card);
+    padding: 18px 12px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 28px;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-num.red { color: #ff4444; }
+  .stat-num.orange { color: #ff8800; }
+  .stat-num.blue { color: #3b82f6; }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  /* PLATFORM CARDS */
+  .section-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 0 20px;
+    margin-bottom: 14px;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 16px;
+    margin-bottom: 28px;
+  }
+  .platform-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .platform-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .platform-card:hover {
+    border-color: var(--border2);
+    background: var(--card2);
+    transform: translateX(3px);
+  }
+  .platform-card:hover::before { opacity: 1; }
+
+  .card-yt::before { background: #ff0000; }
+  .card-ig::before { background: linear-gradient(#833ab4, #fd1d1d, #fcb045); }
+  .card-tt::before { background: #ff0050; }
+  .card-tw::before { background: #1da1f2; }
+  .card-fb::before { background: #1877f2; }
+  .card-sp::before { background: #1db954; }
+
+  .plat-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .plat-icon svg { width: 22px; height: 22px; }
+
+  .icon-yt { background: rgba(255,0,0,0.12); }
+  .icon-ig { background: rgba(131,58,180,0.12); }
+  .icon-tt { background: rgba(255,0,80,0.12); }
+  .icon-tw { background: rgba(29,161,242,0.12); }
+  .icon-fb { background: rgba(24,119,242,0.12); }
+  .icon-sp { background: rgba(29,185,84,0.12); }
+
+  .card-info { flex: 1; min-width: 0; }
+  .card-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  .card-handle {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .card-metrics {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .card-followers {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+  }
+  .card-flabel {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .arrow-icon {
+    color: var(--muted);
+    flex-shrink: 0;
+    margin-left: 8px;
+    transition: color 0.2s;
+  }
+  .platform-card:hover .arrow-icon { color: var(--text); }
+
+  /* FEATURED VIDEO */
+  .featured {
+    margin: 0 16px 28px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card);
+  }
+  .video-thumb {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1a0000 0%, #1a0a00 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .play-btn {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,68,68,0.9);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .video-thumb:hover .play-btn {
+    transform: scale(1.1);
+    background: #ff4444;
+  }
+  .video-meta {
+    padding: 14px 16px;
+  }
+  .video-title {
+    font-size: 14px; font-weight: 500;
+    margin-bottom: 4px;
+    line-height: 1.4;
+  }
+  .video-stats {
+    font-size: 12px; color: var(--muted);
+  }
+
+  /* EDIT PANEL */
+  .edit-btn {
+    display: block;
+    margin: 0 16px 12px;
+    padding: 14px;
+    background: transparent;
+    border: 1px dashed var(--border2);
+    border-radius: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+  .edit-btn:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: #181818;
+    border: 1px solid var(--border2);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 32px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal h3 {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+    color: var(--text);
+  }
+  .field-group { margin-bottom: 14px; }
+  .field-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .field-input {
+    width: 100%;
+    padding: 10px 14px;
+    background: #222;
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-input:focus { border-color: rgba(255,68,68,0.5); }
+  .modal-actions {
+    display: flex; gap: 10px; margin-top: 20px;
+  }
+  .btn-save {
+    flex: 1; padding: 12px;
+    background: #ff4444;
+    border: none; border-radius: 10px;
+    color: #fff; font-size: 14px; font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-save:hover { background: #e03333; }
+  .btn-cancel {
+    padding: 12px 20px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    color: var(--muted); font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .btn-cancel:hover { color: var(--text); }
+
+  .footer {
+    text-align: center;
+    padding: 12px 16px 32px;
+    font-size: 11px;
+    color: #444;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="avatar-wrap">
+    <div class="avatar" id="avatarInitials">AX</div>
+    <div class="live-dot"></div>
+  </div>
+  <div class="creator-name" id="creatorName">ALEX STORM</div>
+  <div class="creator-bio" id="creatorBio">Tech reviews, gaming & lifestyle content. New video every Thursday 🔥</div>
+  <div class="tag-row">
+    <span class="tag">Gaming</span>
+    <span class="tag">Tech</span>
+    <span class="tag">Lifestyle</span>
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-box">
+    <div class="stat-num red" id="totalFollowers">4.2M</div>
+    <div class="stat-label">Total Followers</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num orange" id="totalViews">892M</div>
+    <div class="stat-label">Total Views</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num blue" id="totalPlatforms">6</div>
+    <div class="stat-label">Platforms</div>
+  </div>
+</div>
+
+<!-- PLATFORMS -->
+<div class="section-title">Find me on</div>
+<div class="cards" id="platformCards">
+
+  <a class="platform-card card-yt" href="https://youtube.com/@alexstorm" target="_blank">
+    <div class="plat-icon icon-yt">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" fill="#ff0000"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg>
+    </div>
+    <div class="card-info">
+      <div class="card-name">YouTube</div>
+      <div class="card-handle">@alexstorm</div>
+    </div>
+    <div class="card-metrics">
+      <div class="card-followers" style="color:#ff4444">2.1M</div>
+      <div class="card-flabel">subscribers</div>
+    </div>
+    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <a class="platform-card card-ig" href="https://instagram.com/alexstorm" target="_blank">
+    <div class="plat-icon icon-ig">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="url(#ig)" stroke-width="2"/><circle cx="12" cy="12" r="5" stroke="url(#ig2)" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="#fd1d1d"/><defs><linearGradient id="ig" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse"><stop stop-color="#fcb045"/><stop offset=".5" stop-color="#fd1d1d"/><stop offset="1" stop-color="#833ab4"/></linearGradient><linearGradient id="ig2" x1="7" y1="17" x2="17" y2="7" gradientUnits="userSpaceOnUse"><stop stop-color="#fcb045"/><stop offset="1" stop-color="#833ab4"/></linearGradient></defs></svg>
+    </div>
+    <div class="card-info">
+      <div class="card-name">Instagram</div>
+      <div class="card-handle">@alexstorm</div>
+    </div>
+    <div class="card-metrics">
+      <div class="card-followers" style="color:#c850c0">890K</div>
+      <div class="card-flabel">followers</div>
+    </div>
+    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <a class="platform-card card-tt" href="https://tiktok.com/@alexstorm" target="_blank">
+    <div class="plat-icon icon-tt">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.79 1.52V6.75a4.85 4.85 0 0 1-1.02-.06z" fill="#ff0050"/></svg>
+    </div>
+    <div class="card-info">
+      <div class="card-name">TikTok</div>
+      <div class="card-handle">@alexstorm</div>
+    </div>
+    <div class="card-metrics">
+      <div class="card-followers" style="color:#ff0050">780K</div>
+      <div class="card-flabel">followers</div>
+    </div>
+    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <a class="platform-card card-tw" href="https://twitter.com/alexstorm" target="_blank">
+    <div class="plat-icon icon-tw">
+      <svg viewBox="0 0 24 24" fill="#1da1f2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </div>
+    <div class="card-info">
+      <div class="card-name">X (Twitter)</div>
+      <div class="card-handle">@alexstorm</div>
+    </div>
+    <div class="card-metrics">
+      <div class="card-followers" style="color:#1da1f2">230K</div>
+      <div class="card-flabel">followers</div>
+    </div>
+    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <a class="platform-card card-fb" href="https://facebook.com/alexstorm" target="_blank">
+    <div class="plat-icon icon-fb">
+      <svg viewBox="0 0 24 24" fill="#1877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </div>
+    <div class="card-info">
+      <div class="card-name">Facebook</div>
+      <div class="card-handle">Alex Storm Official</div>
+    </div>
+    <div class="card-metrics">
+      <div class="card-followers" style="color:#1877f2">150K</div>
+      <div class="card-flabel">followers</div>
+    </div>
+    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <a class="platform-card card-sp" href="https://open.spotify.com/show/alexstorm" target="_blank">
+    <div class="plat-icon icon-sp">
+      <svg viewBox="0 0 24 24" fill="#1db954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+    </div>
+    <div class="card-info">
+      <div class="card-name">Spotify Podcast</div>
+      <div class="card-handle">The Alex Storm Show</div>
+    </div>
+    <div class="card-metrics">
+      <div class="card-followers" style="color:#1db954">42K</div>
+      <div class="card-flabel">listeners</div>
+    </div>
+    <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+</div>
+
+<!-- FEATURED VIDEO -->
+<div class="section-title">Latest video</div>
+<div class="featured">
+  <div class="video-thumb" onclick="window.open('https://youtube.com/@alexstorm','_blank')">
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a0000 0%,#0a0a1a 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;">
+      <div style="font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:2px;color:rgba(255,255,255,0.15);text-align:center;padding:0 20px;">I TESTED EVERY AI PHONE IN 2024</div>
+    </div>
+    <div class="play-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><polygon points="5,3 19,12 5,21"/></svg>
+    </div>
+    <div style="position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,0.8);color:#fff;font-size:11px;padding:3px 8px;border-radius:4px;font-weight:500;">12:47</div>
+  </div>
+  <div class="video-meta">
+    <div class="video-title">I Tested Every AI Phone in 2024 — Here's the TRUTH</div>
+    <div class="video-stats">4.2M views &nbsp;·&nbsp; 3 days ago &nbsp;·&nbsp; 98K likes</div>
+  </div>
+</div>
+
+<!-- EDIT BUTTON -->
+<button class="edit-btn" onclick="document.getElementById('editModal').classList.add('open')">
+  ✦ &nbsp; Customize your page
+</button>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <h3>Customize Page</h3>
+
+    <div class="field-group">
+      <label class="field-label">Your Name</label>
+      <input class="field-input" id="inputName" type="text" placeholder="e.g. Alex Storm" value="ALEX STORM">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Bio</label>
+      <input class="field-input" id="inputBio" type="text" placeholder="Short bio...">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Total Followers (e.g. 4.2M)</label>
+      <input class="field-input" id="inputFollowers" type="text" placeholder="4.2M" value="4.2M">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Total Views (e.g. 892M)</label>
+      <input class="field-input" id="inputViews" type="text" placeholder="892M" value="892M">
+    </div>
+    <div class="field-group">
+      <label class="field-label">YouTube URL</label>
+      <input class="field-input" id="inputYT" type="text" placeholder="https://youtube.com/@you">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Instagram URL</label>
+      <input class="field-input" id="inputIG" type="text" placeholder="https://instagram.com/you">
+    </div>
+    <div class="field-group">
+      <label class="field-label">TikTok URL</label>
+      <input class="field-input" id="inputTT" type="text" placeholder="https://tiktok.com/@you">
+    </div>
+    <div class="field-group">
+      <label class="field-label">X / Twitter URL</label>
+      <input class="field-input" id="inputTW" type="text" placeholder="https://x.com/you">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('editModal').classList.remove('open')">Cancel</button>
+      <button class="btn-save" onclick="saveCustomization()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">built with ❤️ for creators</div>
+
+<script>
+function saveCustomization() {
+  const name = document.getElementById('inputName').value.trim();
+  const bio = document.getElementById('inputBio').value.trim();
+  const followers = document.getElementById('inputFollowers').value.trim();
+  const views = document.getElementById('inputViews').value.trim();
+  const ytUrl = document.getElementById('inputYT').value.trim();
+  const igUrl = document.getElementById('inputIG').value.trim();
+  const ttUrl = document.getElementById('inputTT').value.trim();
+  const twUrl = document.getElementById('inputTW').value.trim();
+
+  if (name) {
+    const upper = name.toUpperCase();
+    document.getElementById('creatorName').textContent = upper;
+    const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    document.getElementById('avatarInitials').textContent = initials;
+  }
+  if (bio) document.getElementById('creatorBio').textContent = bio;
+  if (followers) document.getElementById('totalFollowers').textContent = followers;
+  if (views) document.getElementById('totalViews').textContent = views;
+
+  const links = document.querySelectorAll('.platform-card');
+  const urls = [ytUrl, igUrl, ttUrl, twUrl];
+  urls.forEach((url, i) => {
+    if (url && links[i]) links[i].href = url;
+  });
+
+  document.getElementById('editModal').classList.remove('open');
+}
+
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) this.classList.remove('open');
+});
+</script>
+
+</body>
+</html>
